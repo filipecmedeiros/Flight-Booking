@@ -1,7 +1,10 @@
 package client;
 
+import java.io.Serializable;
 
-public class Client {
+import utils.Utils;
+
+public class Client implements Serializable {
 
     private String name;
     private String cpf;
@@ -10,15 +13,15 @@ public class Client {
 
 
     public Client(String name, String cpf, String phone, String email) {
-        this.name = name;
-        this.cpf = cpf;
-        this.phone = phone;
-        this.email = email;
+        setName(name);
+        setCpf(cpf);
+        setPhone(phone);
+        setEmail(email);
     }
 
     public Client (String name, String cpf) {
-    	this.name = name;
-    	this.cpf = cpf;
+    	setName(name);
+    	setCpf(cpf);
     }
     
 	@Override
@@ -42,7 +45,9 @@ public class Client {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if (Utils.isValidName(name)) {
+			this.name = name;
+		}
 	}
 
 	public String getCpf() {
@@ -50,7 +55,9 @@ public class Client {
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = cpf;
+		if (Utils.isValidCPF(cpf)) {
+			this.cpf = cpf;
+		}
 	}
 
 	public String getPhone() {
@@ -58,7 +65,9 @@ public class Client {
 	}
 
 	public void setPhone(String phone) {
-		this.phone = phone;
+		if (Utils.isValidPhone(phone)) {
+			this.phone = phone;
+		}
 	}
 
 	public String getEmail() {
@@ -66,7 +75,9 @@ public class Client {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		if (Utils.isValidEmail(email)) {
+			this.email = email;
+		}
 	}
     
     
