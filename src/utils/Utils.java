@@ -1,5 +1,10 @@
 package utils;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +15,8 @@ public class Utils {
 	public static final Pattern VALID_PHONE_REGEX = Pattern.compile("^[0-9]{10,16}$");
 	public static final Pattern VALID_NAME_REGEX = 
 			Pattern.compile("^[A-Z ]+$", Pattern.CASE_INSENSITIVE);
+	public final static String DATE_FORMAT = "dd/MM/yyyy";
+	
 	
 	private static int calcularDigito(String str, int[] peso) {
 		int soma = 0;
@@ -43,4 +50,27 @@ public class Utils {
 		Matcher matcher = VALID_NAME_REGEX .matcher(name);
 		return matcher.find();
 	}
+	
+	 public static Date parseDate(String date) {
+	     try {
+	         return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+	     } catch (ParseException e) {
+	         return null;
+	     }
+	  }
+	
+	public static boolean isValidDate(String date){
+		boolean result = false;
+		Date today = Calendar.getInstance().getTime();
+		Date df = parseDate(date);
+        
+		if (today.before(df)) {
+        	result = true;
+        }
+		else {
+        	result = false;
+        }
+		
+		return result;
+	}	
 }

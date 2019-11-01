@@ -57,7 +57,7 @@ public class ClientRepository implements Serializable {
 			getRep().add(i, client);
 		}
 		else {
-			System.out.println("This client already exists!");
+			System.out.println("Já existe cliente cadastrado com este CPF");
 		}
 		
 	}
