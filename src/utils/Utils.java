@@ -51,18 +51,20 @@ public class Utils {
 		return matcher.find();
 	}
 	
-	 public static Date parseDate(String date) {
-	     try {
-	         return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+	 public static Date parseDate(String date, String hour) {
+		 date = date + " " + hour;
+		 try {
+	         return new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(date);
 	     } catch (ParseException e) {
 	         return null;
 	     }
 	  }
 	
-	public static boolean isValidDate(String date){
+	public static boolean isValidDate(String date, String hour){
 		boolean result = false;
+		date = date + " " + hour;
 		Date today = Calendar.getInstance().getTime();
-		Date df = parseDate(date);
+		Date df = parseDate(date, hour);
         
 		if (today.before(df)) {
         	result = true;

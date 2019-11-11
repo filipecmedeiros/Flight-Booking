@@ -14,17 +14,14 @@ public class Flight implements Serializable{
 	private String origin;
 	private String destiny;
 	private Date date;
-	private String hour;
 	private int nSeats;
 	private int avaliableSeats;
 	private Client [][] seats;
 	private double value;
 	private String status;
-	private static String counter;
 	
 	public static final Map<Character, Integer> dict = new HashMap<>();
 	static {
-		counter="AAA0000";
 		dict.put('A', 0);
 		dict.put('B', 1);
 		dict.put('C', 2);
@@ -38,39 +35,25 @@ public class Flight implements Serializable{
 		return this.code;
 	}
 	
-	private static String moveCounter(String counter, int position) {
-		char [] aux = counter.toCharArray();
-		if ((aux[position] >='0' && aux[position]<='8') || 
-				(aux[position]>='A' && aux[position]<='Y')) {
-			aux[position] = (char) (aux[position]+1);
+    @Override
+    public boolean equals(Object obj) {
+    	boolean operation = false;
+		if (obj instanceof Flight) {
+			Flight f = (Flight) obj;
+			operation = this.code.equals(f.getCode());
 		}
-		else if (aux[position]=='9') {
-			counter = moveCounter(counter, position-1);
-			aux = counter.toCharArray();
-			aux[position]='0';
-		}
-		else if (aux[position]=='Z') {
-			aux[position]='A';
-		}
-		return  String.valueOf(aux);
-	}
-	
-	private static String generateCode() {
-		String code = counter;
-		counter = moveCounter(counter, 6);
-		return code;
-	}
+		
+		return operation;
+    }
 	
 	public Flight (String origin, String destiny, String date,
 			String hour, double value) {
 		
 		Client[][] seats = new Client [6][6];
 		
-		setCode(generateCode());
 		setOrigin(origin);
 		setDestiny(destiny);
-		setDate(date);
-		setHour(hour);
+		setDate(date, hour);
 		setNseats(36);
 		setAvaliableSeats(36);
 		setSeats(seats);
@@ -134,16 +117,10 @@ public class Flight implements Serializable{
 	public Date getDate() {
 		return date;
 	}
-	public void setDate(String date) {
-		if (Utils.isValidDate(date)) {
-			this.date = Utils.parseDate(date);
+	public void setDate(String date, String hour) {
+		if (Utils.isValidDate(date, hour)) {
+			this.date = Utils.parseDate(date, hour);
 		}
-	}
-	public String getHour() {
-		return hour;
-	}
-	public void setHour(String hour) {
-		this.hour = hour;
 	}
 	public int getNseats() {
 		return nSeats;
