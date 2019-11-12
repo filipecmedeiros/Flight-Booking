@@ -1,7 +1,6 @@
 package main;
 
 import java.io.File;
-import java.util.EnumSet;
 import java.util.Scanner;
 
 import client.Client;
@@ -66,6 +65,7 @@ public class Main {
 		do {
 			System.out.println(messageMainMenu);
 			boolean validInput = false;
+			exit = false;
 			do{
 				try {
 					mainMenu = Integer.parseInt(input.next());
@@ -79,8 +79,20 @@ public class Main {
 			switch(mainMenu) {
 				case 1:
 					do{
-						System.out.println(messageClient);
-						menu = input.nextInt();
+						do{
+							System.out.println(messageClient);
+							validInput = false;
+							exit = false;
+							menu = 0;
+							try {
+								menu = Integer.parseInt(input.next());
+								validInput = true;
+							}catch (Exception e) { 
+								System.out.println("Entrada inválida");
+							}
+						}while (!validInput);
+						
+						
 						switch(menu) {
 							case 1:System.out.println("Nome:");
 								var1 = input.next();
@@ -134,8 +146,18 @@ public class Main {
 					break;
 				case 2:
 					do{
-						System.out.println(messageFlight);
-						menu = input.nextInt();
+						do{
+							System.out.println(messageFlight);
+							validInput = false;
+							exit = false;
+							menu = 0;
+							try {
+								menu = Integer.parseInt(input.next());
+								validInput = true;
+							}catch (Exception e) { 
+								System.out.println("Entrada inválida");
+							}
+						}while (!validInput);
 						switch(menu) {
 							case 1:
 								Locations.print();
@@ -272,9 +294,8 @@ public class Main {
 				case 3: break;					
 				case 4: exit = true; 
 					break;
-				default: break;
 			}
-		}while(mainMenu > 0 && mainMenu <5 && !exit);
+		}while((mainMenu > 0 || mainMenu <5) && !exit);
 		input.close();
 		
 		cr.save(clientsFile.getName());
