@@ -96,6 +96,26 @@ public class Flight implements Serializable{
 		}
 	}
 	
+	public void print() {
+		System.out.println("=============================");
+		System.out.print("Código:");
+		System.out.println(getCode());
+		System.out.print("Origem:");
+		System.out.println(getOrigin());
+		System.out.print("Destino:");
+		System.out.println(getDestiny());
+		System.out.print("Horário:");
+		System.out.println(String.format("%02d", getDate().getHours())
+				 + ":" + String.format("%02d" ,getDate().getMinutes()));
+		System.out.print("Assentos disponíveis:");
+		System.out.println(getNseats());
+		System.out.print("Valor:");
+		System.out.println(getValue());
+		System.out.println("Assentos:");
+		printSeats();
+		System.out.println("=============================");
+	}
+	
 	public String getCode() {
 		return code;
 	}

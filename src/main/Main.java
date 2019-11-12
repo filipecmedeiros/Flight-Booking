@@ -1,12 +1,16 @@
 package main;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.Scanner;
 
 import client.Client;
 import client.ClientRepository;
 import data.FlightRepository;
 import flight.Flight;
+import flight.Locations;
+import utils.Utils;
+
 
 public class Main {
 
@@ -26,10 +30,16 @@ public class Main {
 			fr = (FlightRepository) FlightRepository.decode(flightsFile.getName());
 		else
 			fr = new FlightRepository();
-			
+		
+		
+
+		
 		int mainMenu = 0;
 		boolean exit = false;
 		String var1, var2, var3, var4, var5;
+		Locations location;
+		double value;
+		Flight fa;
 		String messageMainMenu = "Menu:\n"
 				+ "1. Clientes\n"
 				+ "2. Voôs\n"
@@ -46,10 +56,10 @@ public class Main {
 				+ "7. Voltar\n";
 		String messageFlight = "Vôos:\n"
 				+ "1. Cadastrar novo vôo\n"
-				//+ "2. Buscar cliente por CPF\n"
-				//+ "3. Editar telefone\n"
-				//+ "4. Editar e-mail\n"
-				//+ "5. Deletar cliente\n"
+				+ "2. Buscar vôo por local\n"
+				+ "3. Editar valor do vôo\n"
+				+ "4. Remover vôo\n"
+				+ "5. Consultar vôo\n"
 				+ "6. Exibir todos os vôos\n"
 				+ "7. Voltar\n";
 		
@@ -127,18 +137,55 @@ public class Main {
 						System.out.println(messageFlight);
 						menu = input.nextInt();
 						switch(menu) {
-							case 1:System.out.println("Origem:");
+							case 1:
+								Locations.print();
+								System.out.println("Origem:");
 								var1 = input.next();
+								var1 = var1.toUpperCase();
+								try {
+									location = Locations.valueOf(var1);
+								} catch (Exception e){
+									System.out.println("Local inválido");
+									System.out.println("\n\n");
+									exit = true;
+									break;
+								}
+								Locations.print();
 								System.out.println("Destino:");
 								var2 = input.next();
-								System.out.println("Data (no formato dd/mm/yyy):");
+								var2 = var2.toUpperCase();
+								try {
+									location = Locations.valueOf(var2);
+								} catch (Exception e) {
+									System.out.println("Local inválido");
+									System.out.println("\n\n");
+									exit = true;
+									break;
+								}
+								System.out.println("Data (no formato dd/mm/yyyy):");
 								var3 = input.next();
 								System.out.println("Hora (no formato hh:mm):");
 								var4 = input.next();
+								if (!Utils.isValidDate(var3, var4)) {
+									System.out.println("Data inválida");
+									System.out.println("\n\n");
+									exit = true;
+									break;
+								}
 								System.out.println("Valor:");
 								var5 = input.next();
+								try {
+									value = Double.parseDouble(var5);
+									if (value < 0.0) {
+										throw new Exception();
+									}
+								} catch (Exception e) {
+									System.out.println("Valor inválido\n\n");
+									exit = true;
+									break;
+								}
 								Flight f = new Flight(
-										var1, var2, var3, var4, Double.parseDouble(var5));
+										var1, var2, var3, var4, value);
 								try {
 									fr.create(f);
 									fr.save(flightsFile.getName());
@@ -149,26 +196,70 @@ public class Main {
 								}
 									
 								break;
-							/*case 2: System.out.println("Informe o CPF:");
+							case 2: System.out.println("Origem:");
 									var1 = input.next();
-									cr.printClient(var1);
+									System.out.println("Destino:");
+									var2 = input.next();
+									System.out.println("Data (no formato dd/mm/yyyy):");
+									var3 = input.next();
+									fr.search(var1, var2, var3);
 								break;
-							case 3: System.out.println("Informe o CPF do cliente:");
+							case 3: System.out.println("Informe o código do vôo:");
 									var1 = input.next();
-									System.out.println("Informe o telefone:");
-									var2 = input.next();
-									cr.updatePhone(var1, var2);
+									fa = fr.get(var1);
+									if (fa != null) {
+										System.out.println("Valor:");
+										var2 = input.next();
+										try {
+											value = Double.parseDouble(var2);
+											if (value < 0.0) {
+												throw new Exception();
+											}
+											else {
+												fa.setValue(value);
+												fr.save(flightsFile.getName());
+												System.out.println("Valor atualizado com sucesso!");
+											}
+										} catch (Exception e) {
+											System.out.println("Valor inválido\n\n");
+											exit = true;
+											break;
+										}
+									}
+									else {
+										System.out.println("Vôo não encontrado");
+									}
 									break;
-							case 4: System.out.println("Informe o CPF do cliente:");
+							case 4: 
+									System.out.println("Informe o código do vôo:");
 									var1 = input.next();
-									System.out.println("Informe o e-mail:");
-									var2 = input.next();
-									cr.updateEmail(var1, var2);
+									fa = fr.get(var1);
+									if (fa != null) {
+										if (fa.getStatus().equals("Ativo") &&
+												fa.getNseats()==36) {
+											fr.delete(fa);
+											fr.save(flightsFile.getName());
+											System.out.println("Vôo removido com sucesso!");
+										}
+										else {
+											System.out.println("Não é possível remover este vôo");
+										}
+									}
+									else {
+										System.out.println("Vôo não encontrado!");
+									}
 									break;
-							case 5: System.out.println("Informe o CPF do cliente:");
+							case 5: 
+									System.out.println("Informe o código do vôo:");
 									var1 = input.next();
-									cr.delete(var1);
-									break;*/
+									fa = fr.get(var1);
+									if (fa != null) {
+										fa.print();
+									}
+									else {
+										System.out.println("Vôo não encontrado!");
+									}
+									break;
 							case 6: System.out.println(fr);
 									break;
 							case 7:

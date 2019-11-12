@@ -3,6 +3,7 @@ package utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -74,5 +75,18 @@ public class Utils {
         }
 		
 		return result;
-	}	
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static boolean sameDay(Date first, Date second) {
+		boolean result = false;
+		
+		if (first.getYear() == second.getYear() &&
+			first.getMonth() == second.getMonth() &&
+			first.getDate() == second.getDate()) {
+			result = true;
+		}
+		
+		return result;
+	}
 }

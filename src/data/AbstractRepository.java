@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
 
+import client.Client;
+
 public abstract class AbstractRepository <T> implements Serializable {
 	private LinkedList <T> rep;
 			
@@ -92,6 +94,18 @@ public abstract class AbstractRepository <T> implements Serializable {
 		}
 	}
 	
+	public T get(String field) {
+		boolean notFound = true;
+		T c = null;
+		
+		for (int i=0; i<getRep().size() && notFound; i++) {
+			if (getRep().get(i).toString().equals(field)) {
+				c = getRep().get(i);
+				notFound=false;
+			}
+		}
+		return c;
+	}
 	
     public void save(String directory) {
 		File file = new File(directory);

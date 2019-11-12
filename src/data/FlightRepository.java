@@ -1,8 +1,10 @@
 package data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import flight.Flight;
+import utils.Utils;
 
 public class FlightRepository extends AbstractRepository <Flight> implements Serializable{
 
@@ -48,5 +50,35 @@ public class FlightRepository extends AbstractRepository <Flight> implements Ser
 		f.setCode(getCounter());
 		setCounter(generateCode());
 		super.create(f);
+	}
+	
+	public void search(String origin, String destiny, String date) {
+		Date parsedDate = null;
+		origin = origin.toUpperCase();
+		destiny = destiny.toUpperCase();
+		if (Utils.isValidDate(date, "00:00")) {
+			parsedDate = Utils.parseDate(date, "00:00");
+			
+			System.out.println("Vôos encontrados:");
+			for (int i=0; i<getRep().size(); i++) {
+				Flight f = getRep().get(i); 
+				if (f.getOrigin().equals(origin) && f.getDestiny().equals(destiny) 
+						&& Utils.sameDay(f.getDate(), parsedDate) &&
+						f.getNseats()>0 && f.getStatus().equals("Ativo")) {
+					System.out.println("=============================");
+					System.out.print("Código:");
+					System.out.println(f);
+					System.out.print("Horário:");
+					System.out.println(String.format("%02d", f.getDate().getHours())
+							 + ":" + String.format("%02d" ,f.getDate().getMinutes()));
+					System.out.print("Assentos disponíveis:");
+					System.out.println(f.getNseats());
+					System.out.print("Valor:");
+					System.out.println(f.getValue());
+					System.out.println("=============================");
+				}
+			}
+			System.out.println();
+		}
 	}
 }
