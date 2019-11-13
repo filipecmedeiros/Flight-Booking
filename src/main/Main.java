@@ -29,10 +29,9 @@ public class Main {
 			fr = (FlightRepository) FlightRepository.decode(flightsFile.getName());
 		else
 			fr = new FlightRepository();
-		
-		
 
-		
+		fr.verifyFlights();
+				
 		int mainMenu = 0;
 		boolean exit = false;
 		String var1, var2, var3, var4, var5;

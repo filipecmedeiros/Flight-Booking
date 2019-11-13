@@ -88,7 +88,7 @@ public class Flight implements Serializable{
 	}
 	
 	public void chageStatus() {
-		if (getStatus()=="Ativo") {
+		if (getStatus().equals("Ativo")) {
 			setStatus("Efetivado");
 		}
 		else {
@@ -104,15 +104,19 @@ public class Flight implements Serializable{
 		System.out.println(getOrigin());
 		System.out.print("Destino:");
 		System.out.println(getDestiny());
-		System.out.print("Horário:");
-		System.out.println(String.format("%02d", getDate().getHours())
-				 + ":" + String.format("%02d" ,getDate().getMinutes()));
+		System.out.print("Data e horário:");
+		System.out.println(getDate().toLocaleString());
+		//System.out.print("Horário:");
+		//System.out.println(String.format("%02d", getDate().getHours())
+		//		 + ":" + String.format("%02d" ,getDate().getMinutes()));
 		System.out.print("Assentos disponíveis:");
 		System.out.println(getNseats());
 		System.out.print("Valor:");
 		System.out.println(getValue());
 		System.out.println("Assentos:");
 		printSeats();
+		System.out.print("Status:");
+		System.out.println(getStatus());
 		System.out.println("=============================");
 	}
 	

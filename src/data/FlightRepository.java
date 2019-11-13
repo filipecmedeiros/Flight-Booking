@@ -1,6 +1,7 @@
 package data;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 import flight.Flight;
@@ -79,6 +80,19 @@ public class FlightRepository extends AbstractRepository <Flight> implements Ser
 				}
 			}
 			System.out.println();
+		}
+	}
+	
+	public void verifyFlights () {
+		Flight f = null;
+		Date today = Calendar.getInstance().getTime();
+		if (getRep() != null) {
+			for (int i=0; i<getRep().size();i++) {
+				f = getRep().get(i);
+				if (f.getDate().before(today) && f.getStatus().equals("Ativo")) {
+					f.chageStatus();
+				}
+			}
 		}
 	}
 }
