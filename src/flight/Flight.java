@@ -61,6 +61,22 @@ public class Flight implements Serializable{
 		setStatus("Ativo");
 	}
 	
+	public boolean clientHasTicket(Client client) {
+		boolean result = false;
+		
+		for (int i=0; i<6; i++) {
+			for (int j=0; j<6; j++) {
+				if (getSeats()[i][j] != null) {
+					if (getSeats()[i][j].equals(client)) {
+						result = true;
+						break;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 	public void printSeats() {
 		int i, j;
 		System.out.println(" [A][B]|  |[C][D]|  |[E][F]");

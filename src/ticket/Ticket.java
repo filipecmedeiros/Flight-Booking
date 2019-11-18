@@ -91,6 +91,7 @@ public class Ticket implements Serializable{
 		
 			if (flight.getSeats()[this.lineSeat][this.colSeat] == null) {
 				flight.getSeats()[this.lineSeat][this.colSeat] = client;
+				flight.setNseats(flight.getNseats()-1);
 				this.code = flight.getCode()+this.colSeat+this.lineSeat+client.getCpf();
 				this.status = "Ativa";
 			}
@@ -104,7 +105,6 @@ public class Ticket implements Serializable{
 	}
 	
 	public void print() {
-		this.flight.printSeats();
 		System.out.print("Código da passagem: ");
 		System.out.println(getCode());
 		System.out.print("Cliente: ");
@@ -112,9 +112,11 @@ public class Ticket implements Serializable{
 		System.out.print("Vôo: ");
 		System.out.println(getFlight());
 		System.out.print("Assento: ");
-		System.out.println(inv.get(getColSeat()) + getLineSeat());
+		System.out.println(getSeat());
 		System.out.print("Status: ");
 		System.out.println(getStatus());
+		System.out.print("Valor da passagem: ");
+		System.out.println(flight.getValue());
 		System.out.println();
 	}
 	public String getCode() {
@@ -157,6 +159,10 @@ public class Ticket implements Serializable{
 		this.colSeat = colSeat;
 	}
 
+	public String getSeat() {
+		return inv.get(getColSeat()) + getLineSeat();
+	}
+	
 	public String getStatus() {
 		return status;
 	}

@@ -46,6 +46,7 @@ public class Main {
 		String var1, var2, var3, var4, var5;
 		Locations location;
 		double value;
+		Client c;
 		Flight fa;
 		String messageMainMenu = "Menu:\n"
 				+ "1. Clientes\n"
@@ -71,10 +72,10 @@ public class Main {
 				+ "7. Voltar\n";
 		String messageTicket = "Passagens:\n"
 				+ "1. Vender passagem\n"
-				/*+ "2. Consultar passagem de um cliente\n"
+				+ "2. Consultar passagem de um cliente\n"
 				+ "3. Consultar histórico de cliente\n"
 				+ "4. Cancelar passagem\n"
-				+ "5. Consultar passageiros de um vôo\n"
+				/*+ "5. Consultar passageiros de um vôo\n"
 				+ "6. Exibir todos os vôos\n"*/
 				+ "7. Voltar\n";
 				
@@ -114,7 +115,7 @@ public class Main {
 								var1 = input.next();
 								System.out.println("CPF:");
 								var2 = input.next();
-								Client c = new Client(var1, var2);
+								c = new Client(var1, var2);
 								try {
 									cr.create(c);
 									cr.save(clientsFile.getName());
@@ -325,30 +326,57 @@ public class Main {
 						case 1:
 							System.out.println("Informe o CPF do cliente:");
 							var1 = input.next();
-							Client c = cr.read(var1);
+							c = cr.read(var1);
 							System.out.println("Informe o código do vôo:");
 							var2 = input.next();
 							Flight f = fr.get(var2);
 							
 							if (c!= null && f != null) {
-								Ticket t = new Ticket(c, f, input);							
 								
-								if (t.getCode() != null) {
-									tr.create(t);
-									tr.save(ticketFile.getName());
-									fr.save(flightsFile.getName());
-									System.out.println("Passagem reservada com sucesso!");
-									t.print();
+								if (f.clientHasTicket(c)) {
+									System.out.println("Este cliente já tem uma passagem neste vôo.");
 								}
-							
+								else {
+									Ticket t = new Ticket(c, f, input);							
+									
+									if (t.getCode() != null) {
+										tr.create(t);
+										tr.save(ticketFile.getName());
+										fr.save(flightsFile.getName());
+										System.out.println("Passagem reservada com sucesso!");
+										f.printSeats();
+										t.print();
+									}
+								
+								}
 							}
 							else {
 								System.out.println("Os valores informados não estão corretos");
 							}
 							break;
 						case 2:
+							System.out.println("Informe o CPF do cliente:");
+							var1 = input.next();
+							c = cr.read(var1);
+							if (c!=null) {
+								tr.clientTickets(c);
+							}
+							else {
+								System.out.println("Cliente não encontrado.");
+							}
 							break;
 						case 3:
+							System.out.println("Informe o CPF do cliente:");
+							var1 = input.next();
+							c = cr.read(var1);
+							if (c!=null) {
+								tr.clientTicketsAll(c);
+							}
+							else {
+								System.out.println("Cliente não encontrado.");
+							}
+							break;
+						case 4:
 							break;
 						}
 					}while((menu < 0 || menu > 8) && !exit);
