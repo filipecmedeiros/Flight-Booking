@@ -63,17 +63,21 @@ public class Utils {
 	
 	public static boolean isValidDate(String date, String hour){
 		boolean result = false;
-		date = date + " " + hour;
 		Date today = Calendar.getInstance().getTime();
-		Date df = parseDate(date, hour);
-        
-		if (today.before(df)) {
-        	result = true;
-        }
-		else {
-        	result = false;
-        }
 		
+		try{
+			Date df = parseDate(date, hour);
+		
+        
+			if (today.before(df)) {
+	        	result = true;
+	        }
+			else {
+	        	result = false;
+	        }
+		}
+		catch (Exception e) {
+		}
 		return result;
 	}
 	

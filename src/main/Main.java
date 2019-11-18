@@ -6,8 +6,10 @@ import java.util.Scanner;
 import client.Client;
 import client.ClientRepository;
 import data.FlightRepository;
+import data.TicketRepository;
 import flight.Flight;
 import flight.Locations;
+import ticket.Ticket;
 import utils.Utils;
 
 
@@ -19,6 +21,8 @@ public class Main {
 		File clientsFile = new File("./clients");
 		FlightRepository fr;
 		File flightsFile = new File("./flights");
+		TicketRepository tr;
+		File ticketFile = new File("./tickets");
 		
 		if (clientsFile.exists())
 			cr = ClientRepository.decode(clientsFile.getName());
@@ -29,7 +33,12 @@ public class Main {
 			fr = (FlightRepository) FlightRepository.decode(flightsFile.getName());
 		else
 			fr = new FlightRepository();
-
+		
+		if (ticketFile.exists())
+			tr = (TicketRepository) TicketRepository.decode(ticketFile.getName());
+		else
+			tr = new TicketRepository();
+		
 		fr.verifyFlights();
 				
 		int mainMenu = 0;
@@ -41,7 +50,7 @@ public class Main {
 		String messageMainMenu = "Menu:\n"
 				+ "1. Clientes\n"
 				+ "2. Voôs\n"
-				+ "3. Compra de passagens\n"
+				+ "3. Passagens\n"
 				+ "4. Sair\n";
 		int menu;
 		String messageClient = "Clientes:\n"
@@ -60,7 +69,15 @@ public class Main {
 				+ "5. Consultar vôo\n"
 				+ "6. Exibir todos os vôos\n"
 				+ "7. Voltar\n";
-		
+		String messageTicket = "Passagens:\n"
+				+ "1. Vender passagem\n"
+				/*+ "2. Consultar passagem de um cliente\n"
+				+ "3. Consultar histórico de cliente\n"
+				+ "4. Cancelar passagem\n"
+				+ "5. Consultar passageiros de um vôo\n"
+				+ "6. Exibir todos os vôos\n"*/
+				+ "7. Voltar\n";
+				
 		do {
 			System.out.println(messageMainMenu);
 			boolean validInput = false;
@@ -290,7 +307,53 @@ public class Main {
 					}while((menu < 0 || menu > 8) && !exit);
 					exit = false;
 					break;
-				case 3: break;					
+				case 3: 
+					do{
+						do{
+							System.out.println(messageTicket);
+							validInput = false;
+							exit = false;
+							menu = 0;
+							try {
+								menu = Integer.parseInt(input.next());
+								validInput = true;
+							}catch (Exception e) { 
+								System.out.println("Entrada inválida");
+							}
+						}while (!validInput);
+						switch(menu) {
+						case 1:
+							System.out.println("Informe o CPF do cliente:");
+							var1 = input.next();
+							Client c = cr.read(var1);
+							System.out.println("Informe o código do vôo:");
+							var2 = input.next();
+							Flight f = fr.get(var2);
+							
+							if (c!= null && f != null) {
+								Ticket t = new Ticket(c, f, input);							
+								
+								if (t.getCode() != null) {
+									tr.create(t);
+									tr.save(ticketFile.getName());
+									fr.save(flightsFile.getName());
+									System.out.println("Passagem reservada com sucesso!");
+									t.print();
+								}
+							
+							}
+							else {
+								System.out.println("Os valores informados não estão corretos");
+							}
+							break;
+						case 2:
+							break;
+						case 3:
+							break;
+						}
+					}while((menu < 0 || menu > 8) && !exit);
+					exit = false;
+					break;					
 				case 4: exit = true; 
 					break;
 			}
@@ -299,7 +362,7 @@ public class Main {
 		
 		cr.save(clientsFile.getName());
 		fr.save(flightsFile.getName());
-		
+		tr.save(ticketFile.getName());
 		/* CPFs de teste
 		 * 72782091026
 		 * 96914177074
