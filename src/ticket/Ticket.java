@@ -105,7 +105,7 @@ public class Ticket implements Serializable{
 	}
 	
 	public void print() {
-		System.out.print("Código da passagem: ");
+		System.out.print("\nCódigo da passagem: ");
 		System.out.println(getCode());
 		System.out.print("Cliente: ");
 		System.out.println(getClient());
@@ -115,8 +115,14 @@ public class Ticket implements Serializable{
 		System.out.println(getSeat());
 		System.out.print("Status: ");
 		System.out.println(getStatus());
-		System.out.print("Valor da passagem: ");
-		System.out.println(flight.getValue());
+		if (getStatus().equals("Cancelada")) {
+			System.out.print("Valor do crédito: ");
+			System.out.println(flight.getValue()/2);
+		}
+		else {
+			System.out.print("Valor da passagem: ");
+			System.out.println(flight.getValue());
+		}
 		System.out.println();
 	}
 	public String getCode() {

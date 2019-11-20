@@ -48,6 +48,7 @@ public class Main {
 		double value;
 		Client c;
 		Flight fa;
+		Ticket t;
 		String messageMainMenu = "Menu:\n"
 				+ "1. Clientes\n"
 				+ "2. Voôs\n"
@@ -75,9 +76,8 @@ public class Main {
 				+ "2. Consultar passagem de um cliente\n"
 				+ "3. Consultar histórico de cliente\n"
 				+ "4. Cancelar passagem\n"
-				/*+ "5. Consultar passageiros de um vôo\n"
-				+ "6. Exibir todos os vôos\n"*/
-				+ "7. Voltar\n";
+				+ "5. Consultar passageiros de um vôo\n"
+				+ "6. Voltar\n";
 				
 		do {
 			System.out.println(messageMainMenu);
@@ -337,7 +337,7 @@ public class Main {
 									System.out.println("Este cliente já tem uma passagem neste vôo.");
 								}
 								else {
-									Ticket t = new Ticket(c, f, input);							
+									t = new Ticket(c, f, input);							
 									
 									if (t.getCode() != null) {
 										tr.create(t);
@@ -377,9 +377,34 @@ public class Main {
 							}
 							break;
 						case 4:
+							System.out.println("Informe o código da passagem:");
+							var1 = input.next();
+							
+							t = tr.get(var1);
+							if (t!=null) {
+								tr.cancell(t);
+								tr.save(ticketFile.getName());
+								t.print();
+							}
+							else {
+								System.out.println("Desculpe, essa passagem não consta no banco.");
+							}
+							break;
+						case 5:
+							System.out.println("Informe o código do vôo:");
+							var1 = input.next();
+							
+							f = fr.get(var1);
+							if (f!=null) {
+								tr.clientsPerFlight(f);
+							}
+							else {
+								System.out.println("Desculpe, esse vôo não consta no banco");
+							}
+						case 6:
 							break;
 						}
-					}while((menu < 0 || menu > 8) && !exit);
+					}while((menu < 0 || menu > 7) && !exit);
 					exit = false;
 					break;					
 				case 4: exit = true; 
